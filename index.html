@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张驰的星际工程日志</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #0a0a1a;
+            color: #e0e0ff;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(41, 103, 255, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(156, 39, 176, 0.15) 0%, transparent 20%),
+                url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-attachment: fixed;
+            line-height: 1.6;
+        }
+        
+        /* 星空动画效果 */
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+        
+        /* 导航栏 */
+        nav {
+            background: rgba(10, 10, 30, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(100, 100, 255, 0.2);
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+        
+        nav li {
+            margin: 0 1.5rem;
+        }
+        
+        nav a {
+            color: #7af;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        nav a:hover {
+            color: #bdf;
+            background: rgba(100, 150, 255, 0.2);
+            text-shadow: 0 0 10px rgba(100, 200, 255, 0.7);
+        }
+        
+        /* 主要内容 */
+        .container {
+            max-width: 1200px;
+            margin: 6rem auto 3rem;
+            padding: 0 2rem;
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+            background: rgba(20, 20, 50, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(100, 100, 255, 0.3);
+            box-shadow: 0 0 30px rgba(50, 100, 255, 0.2);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #7af, #a5f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: #ccd;
+        }
+        
+        .hero .quote {
+            font-style: italic;
+            color: #aaf;
+            margin-top: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero .quote::before,
+        .hero .quote::after {
+            content: '"';
+            color: #7af;
+            font-size: 1.5rem;
+        }
+        
+        /* 卡片样式 */
+        .card {
+            background: rgba(20, 20, 50, 0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(100, 100, 255, 0.3);
+            box-shadow: 0 0 20px rgba(50, 100, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(50, 100, 255, 0.2);
+        }
+        
+        .card h2 {
+            color: #7af;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            border-bottom: 1px solid rgba(100, 100, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        /* 状态指示器 */
+        .status {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .status-item {
+            background: rgba(50, 50, 100, 0.5);
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* 游戏专区 */
+        .games {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .game-card {
+            flex: 1;
+            min-width: 250px;
+            background: rgba(30, 30, 70, 0.7);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid rgba(100, 100, 255, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .game-card:hover {
+            background: rgba(40, 40, 90, 0.8);
+            border-color: rgba(100, 150, 255, 0.4);
+        }
+        
+        .game-card h3 {
+            color: #a5f;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .game-card h3::before {
+            content: "🎮";
+            margin-right: 0.5rem;
+        }
+        
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            background: rgba(10, 10, 30, 0.8);
+            border-top: 1px solid rgba(100, 100, 255, 0.2);
+        }
+        
+        footer p {
+            color: #889;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav li {
+                margin: 0.5rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .games {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- 导航栏 -->
+    <nav>
+        <ul>
+            <li><a href="#home">星际总部</a></li>
+        </ul>
+    </nav>
+    
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 英雄区域 -->
+        <section id="home" class="hero">
+            <h1>张驰的星际工程日志</h1>
+            <p>26岁 | 湖南郴州 | 珠海土木工程师 | 英雄联盟召唤师 | 云顶之弈指挥官</p>
+            <div class="quote">在钢筋混凝土中建造现实，在星辰大海中放飞想象</div>
+            
+            <div class="status">
+                <div class="status-item">🏗️ 正在参与珠海横琴某商业综合体项目</div>
+                <div class="status-item">🎮 最近沉迷云顶S9.5赛季</div>
+                <div class="status-item">📚 正在阅读《三体》第三部</div>
+                <div class="status-item">🎵 循环播放：《星空》- 纯音乐版</div>
+            </div>
+        </section>
+        
+        <!-- 关于我 -->
+        <section id="about" class="card">
+            <h2>关于舰长</h2>
+            <p>你好，我是张驰，一名来自湖南郴州的26岁土木工程师，目前在珠海从事建筑工程相关工作。白天，我与钢筋混凝土为伴，参与建造城市的未来；夜晚，我化身为召唤师峡谷的战士或云顶之弈的战术大师。</p>
+            
+            <p>从小我就对星空和科幻充满向往，刘慈欣的《三体》系列是我最爱的作品。这个网站是我将现实工作与科幻爱好结合的尝试，希望能在这里分享我的工程见闻、游戏心得和科幻遐想。</p>
+            
+            <h3 style="margin-top: 1.5rem; color: #aaf;">个人轨迹</h3>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li>🎓 湖南某大学土木工程专业毕业</li>
+                <li>🏢 现就职于珠海某建筑工程公司</li>
+                <li>🏆 英雄联盟黄金段位玩家</li>
+                <li>♟️ 云顶之弈钻石段位指挥官</li>
+                <li>🚀 科幻小说和电影爱好者</li>
+            </ul>
+        </section>
+        
+        <!-- 工作内容 -->
+        <section id="work" class="card">
+            <h2>工程日志</h2>
+            <p>作为一名土木工程师，我参与过多个建筑项目的设计与施工。在这个板块，我会分享一些工程案例、技术心得和行业见解。</p>
+            
+            <h3 style="margin-top: 1.5rem; color: #aaf;">近期项目</h3>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li>珠海横琴金融岛商业综合体 - 结构设计助理</li>
+                <li>中山某住宅小区 - 施工监理</li>
+                <li>澳门某酒店改造项目 - BIM技术应用</li>
+            </ul>
+            
+            <h3 style="margin-top: 1.5rem; color: #aaf;">技术专长</h3>
+            <div class="status" style="margin-top: 1rem;">
+                <div class="status-item">AutoCAD</div>
+                <div class="status-item">Revit</div>
+                <div class="status-item">BIM技术</div>
+                <div class="status-item">结构计算</div>
+                <div class="status-item">施工管理</div>
+            </div>
+        </section>
+        
+        <!-- 游戏专区 -->
+        <section id="games" class="card">
+            <h2>娱乐舱</h2>
+            <p>工作之余，电子游戏是我放松和社交的重要方式。这里是我分享游戏心得和战绩的地方。</p>
+            
+            <div class="games">
+                <div class="game-card">
+                    <h3>英雄联盟</h3>
+                    <p>从大学时代就开始玩的MOBA游戏，主打ADC位置，最喜欢的英雄是伊泽瑞尔和卡莎。目前段位黄金，正在冲击铂金。</p>
+                    <p style="margin-top: 0.5rem; color: #aaf;">"精准与否，就是屠宰与手术的区别"</p>
+                </div>
+                
+                <div class="game-card">
+                    <h3>云顶之弈</h3>
+                    <p>最近沉迷的自走棋游戏，喜欢研究各种阵容搭配和经济运营。S9.5赛季达到钻石段位，擅长虚空和恕瑞玛阵容。</p>
+                    <p style="margin-top: 0.5rem; color: #aaf;">"这不是运气游戏，是数学游戏"</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 联系方式 -->
+        <section id="contact" class="card">
+            <h2>通讯站</h2>
+            <p>如果你想讨论土木工程、游戏攻略或科幻话题，欢迎通过以下方式联系我：</p>
+            
+            <div class="status" style="margin-top: 1rem;">
+                <div class="status-item">📧 邮箱: zhangchi@example.com</div>
+                <div class="status-item">🐦 微博: @星际工程师张驰</div>
+                <div class="status-item">🎮 英雄联盟ID: 郴州小霸王</div>
+                <div class="status-item">♟️ 云顶之弈ID: 星空指挥官</div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2023 张驰的星际工程日志 - 探索现实与想象的边界</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #667;">Made with ❤️ in Zhuhai, China</p>
+    </footer>
+    
+    <script>
+        // 创建星空背景
+        document.addEventListener('DOMContentLoaded', function() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // 随机大小
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // 随机位置
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // 随机闪烁延迟
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        });
+    </script>
+</body>
+</html>
